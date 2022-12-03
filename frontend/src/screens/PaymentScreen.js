@@ -1,39 +1,27 @@
-import React, { useState} from "react";
-import { Link } from "react-router-dom";
-import Header from "./../components/Header";
-import { useSelector, useDispatch } from 'react-redux';
-import { savePaymentMethod } from "../Redux/Actions/CartActions";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {savePaymentMethod} from "../Redux/Actions/CartActions"
 
-const PaymentScreen = ({history}) => {
+import Header from "./../components/Header";
+
+const PaymentScreen = ({ history }) => {
   window.scrollTo(0, 0);
 
-  const cart = useSelector((state)=> state.cart)
-  const {shippingAddress, paymentMethod} = cart;
-  
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
 
   if (!shippingAddress) {
     history.push("/shipping");
   }
 
-  const [paymentMethodvar, setPaymentMethod] = useState(paymentMethod.paymentMethodvar)
+  const [paymentMethod, setPaymentMethod] = useState("PayPal");
 
   const dispatch = useDispatch();
 
-  
-
-  
-  
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(savePaymentMethod(paymentMethodvar))
-    
-     if(paymentMethodvar === undefined   ){
-      history.push("/payment")
-
-    }
-    else
-    {history.push("/placeorder")}
-    
+    dispatch(savePaymentMethod(paymentMethod));
+    history.push("/placeorder");
   };
   return (
     <>
@@ -46,16 +34,17 @@ const PaymentScreen = ({history}) => {
           <h6>SELECT PAYMENT METHOD</h6>
           <div className="payment-container">
             <div className="radio-container">
-              <input className="form-check-input" type="radio" value="PayPal or Credit Card" onChange={(e)=> setPaymentMethod(e.target.value)} />
+              <input
+                className="form-check-input"
+                type="radio"
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
               <label className="form-check-label">PayPal or Credit Card</label>
             </div>
           </div>
-          
-          <button  type="submit">
-           
-              Continue
-            
-          </button>
+
+          <button type="submit">Continue</button>
         </form>
       </div>
     </>
